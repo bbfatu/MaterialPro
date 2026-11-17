@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaterialPro - by TechLeeds</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:0;background:#eef2f6;color:#222}
+#loginScreen{max-width:440px;margin:50px auto;background:white;padding:30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+#loginScreen h1{text-align:center;margin:0;font-size:28px}
+#loginScreen p{text-align:center;color:#666}
+#loginScreen input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
+#appScreen{max-width:1180px;margin:0 auto;padding:20px}
+.card{background:white;padding:20px;border-radius:14px;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+@media(max-width:700px){.cards{grid-template-columns:1fr 1fr}}
+.cards div{background:white;padding:20px;border-radius:14px;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
+.cards h3{margin:0;color:#666;font-size:13px}
+.cards h2{margin:8px 0 0;font-size:26px}
+input,select{padding:11px;margin:5px 0;width:100%;border:1px solid #ddd;border-radius:8px;font-size:14px}
+table{width:100%;border-collapse:collapse;background:white;margin-top:12px}
+th,td{border:1px solid #eee;padding:8px;text-align:left;font-size:13px;vertical-align:middle}
+th{background:#1a1a2e;color:white}
+.tabBtn{padding:10px 18px;border:none;background:#e9e9e9;border-radius:8px;margin-right:6px;margin-bottom:6px;font-weight:600;cursor:pointer}
+.tabBtn.active{background:#1a1a2e;color:white}
+.delBtn{background:#e63946;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+.editBtn{background:#007bff;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+.saveBtn{background:#00a651;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:700}
+.cancelBtn{background:#888;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
+.addBtn{background:#00a651;color:white;border:none;padding:12px;border-radius:8px;width:100%;font-weight:700;font-size:15px}
+.manageBtn{background:#ff9f00;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.fieldBtn{background:#6c5ce7;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.exportBtn{background:#0a7a42;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.printBtn{background:#111;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.syncBtn{background:#007bff;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.inviteBtn{background:#1a1a2e;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-bottom:6px}
+.trashBtn{background:#333;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-bottom:6px;margin-right:6px}
+.restoreBtn{background:#00a651;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+.permDelBtn{background:#111;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-weight:600}
+.rowInput{width:100%;padding:6px;border:2px solid #007bff;border-radius:6px;font-size:13px;background:#eef7ff;min-width:70px}
+.editingRow{background:#fffbe6}
+.badge{display:inline-block;background:#eef7ff;color:#007bff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.searchBox{max-width:320px}
+.clearBtn{background:white;color:#e63946;border:1px solid #e63946;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px}
+.trashCard{border:2px dashed #333}
+.brandBar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.brandBar h2{margin:0}
+.brandBar small{color:#888}
+.filterBtn{padding:8px 12px;border-radius:8px;border:none;background:#eee;font-weight:700;cursor:pointer;margin:2px}
+.filterBtn.clear{background:#e63946;color:white}
+.profitBtn{background:#1a1a2e;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.dateInput{width:auto;display:inline-block;max-width:160px}
+.tabFilterRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.tabFilterRow input{max-width:280px;margin:0}
+.showAllBtn{background:#eef7ff;color:#1a1a2e;border:1px solid #1a1a2e;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+.pivotBtn{background:#6c5ce7;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-right:6px;margin-bottom:6px}
+.pageBtn{background:#1a1a2e;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;margin:2px}
+.pageBtn:disabled{background:#ccc;cursor:default}
+.managePanel{border:2px solid #ff9f00}
+.fieldPanel{border:2px solid #6c5ce7}
+#oldCards{display:none!important}
+#printTitle{display:none}
+@media print{
+  body{background:white} #loginScreen,.brandBar,.cards,#trashCard,.tabFilterRow,.addBtn,.clearBtn,.delBtn,.editBtn,.saveBtn,.cancelBtn,.manageBtn,.fieldBtn,.exportBtn,.printBtn,.syncBtn,.profitBtn,.inviteBtn,.trashBtn,.searchBox,#searchInput,#fromDate,#toDate,.filterBtn,#dateHint,#roleHint{display:none!important}
+  #appScreen{display:block!important;padding:0} .card{box-shadow:none;border:none;padding:0;margin:0}
+  .card:not(.printActive){display:none!important} .printActive{display:block!important}
+  #printTitle{display:block!important;font-size:22px;font-weight:800;margin-bottom:8px}
+  table{font-size:12px} th{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  input{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="card">
+<h1>📦 MaterialPro</h1>
+<p style="font-weight:700;color:#1a1a2e;margin-bottom:2px">by TechLeeds • Leeds</p>
+<p>Track Materials, Mattresses, Workers & Profit</p>
+<input id="email" placeholder="Email" value="bbfatu@gmail.com">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="doLogin()" style="width:100%;padding:12px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-weight:700">Login</button>
+<p style="margin-top:10px"><a href="#" onclick="forgotPass();return false;">Forgot Password?</a></p>
+<p id="msg" style="color:red"></p>
+<p style="font-size:11px;color:#999">Secure • Your data is private to your company</p>
+</div>
+<div id="appScreen" style="display:none">
+<div class="card brandBar">
+<div><h2>📦 MaterialPro <small>by TechLeeds</small></h2><div style="margin-top:6px"><span class="badge" id="companyBadge">Company</span> <span class="badge" id="roleBadge">Role</span> <span class="badge" id="syncBadge">● Lists synced via items</span></div><div style="margin-top:6px"><b id="welcome" style="font-size:15px">Hi</b></div></div>
+<div><button class="trashBtn" id="trashBtn" onclick="toggleTrash()">🗑️ Trash (<span id="trashCount">0</span>)</button> <button onclick="cleanDuplicates()" style="background:#ff9800;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700">🧹 Clean Duplicates</button><button class="inviteBtn" id="inviteBtn" onclick="inviteStaff()">+ Invite Staff</button><button onclick="doLogout()" style="background:#e63946;color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:700">Logout</button></div>
+</div>
+<div id="trashCard" class="card trashCard" style="display:none">
+<h3>🗑️ Trash - Deleted Items (Safe - Not Gone Forever)</h3>
+<p style="font-size:13px;color:#666" id="trashHint">Deleted rows go here. You can Restore them.</p>
+<button id="emptyTrashBtn" onclick="emptyTrash()" style="background:#e63946;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer">Empty Trash Forever</button>
+<button onclick="toggleTrash()" style="background:#888;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer">Close Trash</button>
+<table><thead><tr><th>Deleted On</th><th>Tab</th><th>Item</th><th>Details</th><th>Action</th></tr></thead><tbody id="trashList"></tbody></table>
+</div>
+<div class="card" id="activeDash"><h3 id="activeDashTitle">📊 Dashboard - Active List: Materials</h3><div id="activeDashBody" style="font-size:14px">Loading...</div></div>
+<div class="cards" id="oldCards" style="display:none"><div><h3>Materials Total</h3><h2 id="tMat">£0</h2></div><div><h3>Mattresses Total</h3><h2 id="tMatt">£0</h2></div><div><h3>Workers Pay</h3><h2 id="tWork">£0</h2></div><div id="profitCard"><h3>Profit</h3><h2 id="tProfit">£0</h2></div></div>
+<div class="card"><div class="tabFilterRow"><input id="tabSearch" placeholder="🔍 Filter lists... e.g. Petrol" oninput="onTabSearch(this.value)"><button class="showAllBtn" id="showAllTabsBtn" onclick="toggleShowAllTabs()">Show All Lists ▼</button><span id="tabCountHint" style="font-size:12px;color:#666"></span></div><div id="tabBar"></div><br><button class="manageBtn" id="manageTabsBtn" onclick="manageTabs()">⚙️ Manage Tabs</button><button class="fieldBtn" id="manageFieldsBtn" onclick="manageFields()">✏️ Manage Fields</button><button class="profitBtn" id="profitToggleBtn" onclick="toggleProfit()">💰 Hide Profit</button><button class="exportBtn" onclick="exportCSV()">⬇️ Export to Excel (CSV)</button><button class="printBtn" onclick="printCurrentTab()">🖨️ Print / PDF This List</button><button class="syncBtn" onclick="manualSync()">🔄 Sync Lists</button><button class="pivotBtn" onclick="togglePivot()">📊 Pivot Report</button><br><input id="searchInput" class="searchBox" placeholder="🔍 Search in this tab... e.g. Banana" oninput="renderAll();renderAllCustom()"><br><br><div style="background:#f7f7ff;padding:12px;border-radius:10px"><label style="font-size:13px;font-weight:700">📅 Filter by Date:</label><br><input id="fromDate" class="dateInput" type="date" onchange="renderAll();renderAllCustom()"> to <input id="toDate" class="dateInput" type="date" onchange="renderAll();renderAllCustom()"> <button class="filterBtn" onclick="setDateFilter('today')">Today</button><button class="filterBtn" onclick="setDateFilter('week')">This Week</button><button class="filterBtn" onclick="setDateFilter('month')">This Month</button><button class="filterBtn" onclick="setDateFilter('year')">This Year</button><button class="filterBtn" onclick="setDateFilter('all')">Clear Date</button><div id="dateHint" style="font-size:12px;color:#666;margin-top:6px">Showing all dates. Pick From-To to filter, even after 2 years of entries.</div></div><p style="font-size:12px;color:#666" id="roleHint"></p></div>
+<div id="manageTabsPanel" class="card managePanel" style="display:none"> <button onclick="removeDuplicates()" style="background:#ff9800;color:white;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:bold;">
+  🧹 Remove Duplicates
+</button>  <h3>⚙️ Manage Tabs - No Popup, Do It Here</h3><p style="font-size:13px;color:#666">Pick a list, then Rename or Delete. Or type a new name to Add a new list (starts with NO default fields).</p><label>Pick a list</label><select id="mtSelect"></select><label>New name (for Rename or Add)</label><input id="mtNewName" placeholder="e.g. Petrol, Tools, Vans"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="manageBtn" onclick="doRenameTab()">✏️ Rename Selected List</button><button class="delBtn" style="padding:10px 16px" onclick="doDeleteTab()">🗑️ Delete Selected List</button><button class="addBtn" style="width:auto" onclick="doAddTab()">+ Add New List With This Name</button><button class="cancelBtn" style="padding:10px 16px" onclick="closeManagePanels()">Close</button></div><p id="mtMsg" style="font-size:13px;color:#007bff"></p></div>
+<div id="manageFieldsPanel" class="card fieldPanel" style="display:none"><h3>✏️ Manage Fields - No Popup, Do It Here</h3><p style="font-size:13px;color:#666">Pick a list, then pick a field. You can Add, Rename, Delete, Change Type, or Reorder.</p><label>Pick a list</label><select id="mfTabSelect" onchange="refreshFieldSelect()"></select><label>Pick a field (for Rename / Delete / Change Type)</label><select id="mfFieldSelect"></select><div id="mfCurrent" style="font-size:13px;color:#666"></div><label>Field name (for Add or Rename)</label><input id="mfNewName" placeholder="e.g. Litres, Driver, Mileage"><label>Type for new field / change type</label><select id="mfNewType"><option value="text">Text - names, Ref, Driver</option><option value="number">Number - Amount, Litres, Mileage</option><option value="date">Date</option></select><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="fieldBtn" onclick="doAddField()">+ Add New Field</button><button class="fieldBtn" onclick="doRenameField()">✏️ Rename Selected Field</button><button class="delBtn" style="padding:10px 16px" onclick="doDeleteField()">🗑️ Delete Selected Field</button><button class="fieldBtn" onclick="doChangeFieldType()">🔄 Change Type of Selected Field</button></div><hr><label>Reorder - type labels separated by commas, e.g. Ref, FirstName, LastName, Date, Amount, paymentStatus</label><input id="mfReorder" placeholder="Ref, FirstName, LastName, Date, Amount, paymentStatus"><button class="fieldBtn" onclick="doReorderFields()">↕️ Apply New Order</button><button class="cancelBtn" style="padding:10px 16px" onclick="closeManagePanels()">Close</button><p id="mfMsg" style="font-size:13px;color:#007bff"></p></div>
+<div id="pivotCard" class="card" style="display:none"><h3>📊 Pivot / Statistical Report - Compare 2 Lists</h3><p style="font-size:13px;color:#666">Group both lists by a common field (e.g. Date) and compare Counts and Sums. Works with any 2 lists.</p><label>List 1</label><select id="pivotList1"></select><label>List 2</label><select id="pivotList2"></select><label>Group By Field (must exist in both, e.g. Date)</label><select id="pivotGroup"></select><label>Number Field to Sum (from List 1, e.g. Amount)</label><select id="pivotNum"></select><label>Number Field to Sum (from List 2, optional)</label><select id="pivotNum2"></select><button class="addBtn" onclick="generatePivot()">Generate Pivot Report</button><div id="pivotResult" style="margin-top:12px"></div></div>
+<div id="mat" class="card"><h3 id="matTitle">Add Material</h3><input id="mDate" type="date"><input id="mItem" placeholder="Item *"><input id="mQty" type="number" placeholder="Qty *"><input id="mBuy" type="number" placeholder="Buy Price *"><input id="mSell" type="number" placeholder="Sell Price *"><button class="addBtn" id="addMatBtn" onclick="addMat()">Add Material</button><br><br><button class="clearBtn" onclick="clearTab('material')">⚠️ Move ALL in this Tab to Trash</button><table><thead><tr><th>Date</th><th>Item</th><th>Qty</th><th>Buy</th><th>Sell</th><th>Total</th><th id="profitHeader">Profit</th><th>Action</th></tr></thead><tbody id="matList"></tbody></table><div id="pag_mat"></div></div>
+<div id="matt" class="card" style="display:none"><h3 id="mattTitle">Add Mattress</h3><input id="mmDate" type="date"><input id="mmType" placeholder="Mattress Type *"><input id="mmQty" type="number" placeholder="Qty *"><input id="mmPrice" type="number" placeholder="Price *"><input id="mmCust" placeholder="Customer"><input id="mmBrand" placeholder="Brand"><button class="addBtn" onclick="addMatt()">Add Mattress</button><br><br><button class="clearBtn" onclick="clearTab('mattress')">⚠️ Move ALL in this Tab to Trash</button><table><thead><tr><th>Date</th><th>Type</th><th>Qty</th><th>Total</th><th>Customer</th><th>Brand</th><th>Action</th></tr></thead><tbody id="mattList"></tbody></table><div id="pag_matt"></div></div>
+<div id="work" class="card" style="display:none"><h3 id="workTitle">Add Worker</h3><input id="wDate" type="date"><input id="wName" placeholder="Name *"><input id="wWhat" placeholder="Carried / What *"><input id="wTrips" type="number" placeholder="Trips *"><input id="wPay" type="number" placeholder="Pay per trip (£5 default)"><input id="wPaid" type="number" placeholder="Paid"><button class="addBtn" onclick="addWork()">Add Worker</button><br><br><button class="clearBtn" onclick="clearTab('worker')">⚠️ Move ALL in this Tab to Trash</button><table><thead><tr><th>Date</th><th>Name</th><th>Carried</th><th>Trips</th><th>Pay</th><th>Paid</th><th>Action</th></tr></thead><tbody id="workList"></tbody></table><div id="pag_work"></div></div>
+<div id="exp" class="card" style="display:none"><h3 id="expTitle">Add Expense</h3><input id="eDate" type="date"><input id="eItem" placeholder="Item *"><input id="eAmt" type="number" placeholder="Amount *"><button class="addBtn" onclick="addExp()">Add Expense</button><br><br><button class="clearBtn" onclick="clearTab('expense')">⚠️ Move ALL in this Tab to Trash</button><table><thead><tr><th>Date</th><th>Item</th><th>Amount</th><th>Action</th></tr></thead><tbody id="expList"></tbody></table><div id="pag_exp"></div></div>
+<div id="customTabs"></div>
+<div id="printTitle">MaterialPro - by TechLeeds</div>
+<p style="text-align:center;font-size:12px;color:#999">MaterialPro by TechLeeds • Leeds • Your data is private to your company</p>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, where, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyB9_lVz3KPI3mTt-oDOwzrUKDxmUsYuIT8", authDomain: "materialpro-58641.firebaseapp.com", projectId: "materialpro-58641", storageBucket: "materialpro-58641.firebasestorage.app", messagingSenderId: "152487893475", appId: "1:152487893475:web:724d1f75f19ee8e0bea8d6" };
+const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+let secondaryApp=null; try{ secondaryApp = initializeApp(firebaseConfig, "secondary"); }catch(e){ secondaryApp = app; } const secondaryAuth = getAuth(secondaryApp);
+let companyId=""; let currentUser=null; 
+let userRole="staff"; let mats=[], matts=[], works=[], exps=[]; let customItems={}; let editingId=null; let trashItems=[]; let trashOpen=false;
+function userKey(base){ let e=(currentUser&&currentUser.email?currentUser.email:'guest'); return base+'_'+e.replace(/[^a-z0-9]/gi,'_'); }
+window._existingRefsCache = null;
+window.getExistingRefs = async function(customTabId) {
+  if (!companyId) return new Set();
+  const q = query(collection(db, "items"), where("companyId", "==", companyId));
+  const snap = await getDocs(q);
+  const set = new Set();
+  snap.forEach(d => {
+    const data = d.data();
+    const tab = data.customTabId || data.tabId || "default";
+    const ref = (data.ref || "").toString().trim().toLowerCase();
+    if (ref) set.add(tab + "||" + ref);
+  });
+  return set;
+};
+window.removeDuplicates = async function() {
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  try {
+    if (!companyId) { alert("Login first"); return; }
+    const q = query(collection(db, "items"), where("companyId", "==", companyId));
+    const snap = await getDocs(q);
+    const seen = {};
+    const toDelete = [];
+    snap.forEach(d => {
+      const data = d.data();
+      const tab = data.customTabId || data.tabId || "default";
+      const ref = (data.ref || "").toString().trim().toLowerCase();
+      if (!ref) return;
+      const key = tab + "||" + ref;
+      if (!seen[key]) {
+        seen[key] = { id: d.id, time: data.createdAt?.seconds || 0 };
+      } else {
+        const newTime = data.createdAt?.seconds || 0;
+        if (newTime < seen[key].time) {
+          toDelete.push(seen[key].id);
+          seen[key] = { id: d.id, time: newTime };
+        } else {
+          toDelete.push(d.id);
+        }
+      }
+    });
+    if (toDelete.length === 0) { alert("No duplicates found in ANY list. All clean ✅"); return; }
+    const ok = confirm(`Found ${toDelete.length} duplicates across all lists.\nKeep 1 of each Ref per list, delete the extra copies?`);
+    if (!ok) return;
+    for (const id of toDelete) await deleteDoc(doc(db, "items", id));
+    alert(`Done ✅ Deleted ${toDelete.length} duplicates.`);
+    location.reload();
+  } catch(e) { console.error(e); alert("Error: " + e.message); }
+};
+function loadUserTabs(){
+  let saved = JSON.parse(localStorage.getItem(userKey('myTabs'))||'null');
+  if(saved){ tabs = saved; }
+  else{
+    let old = JSON.parse(localStorage.getItem('myTabs')||'null');
+    if(old && isAdmin()){ tabs = old; saveTabs(); }
+    else{ tabs = [{id:'mat', label:'Materials', type:'material'}]; saveTabs(); }
+  }
+  deletedTabIds = JSON.parse(localStorage.getItem(userKey('deletedTabIds'))||'[]');
+}
+function isAdmin(){ return userRole==='admin' || userRole==='owner'; }
+function canManageTabsFields(){ return isAdmin() || userRole==='buyer'; }
+let showProfit = localStorage.getItem('showProfit')!=='no';
+let tabs = JSON.parse(localStorage.getItem('myTabs')||'null') || [{id:'mat', label:'Materials', type:'material'},{id:'matt', label:'Mattresses', type:'mattress'},{id:'work', label:'Workers', type:'worker'},{id:'exp', label:'Expenses', type:'expense'},];
+let deletedTabIds = JSON.parse(localStorage.getItem('deletedTabIds')||'[]');
+let activeTab='mat'; let fieldLabels = JSON.parse(localStorage.getItem('myFieldLabels')||'null') || { material:{date:'Date', item:'Item', qty:'Qty'}, mattress:{date:'Date', mattressType:'Type', qty:'Qty', customer:'Customer', brand:'Brand'}, worker:{date:'Date', name:'Name', carried:'Carried', trips:'Trips', paid:'Paid'}, expense:{date:'Date', item:'Item', amt:'Amount'} };
+if(!fieldLabels['petrol']){ fieldLabels['petrol']={date:'Date', item:'Item', amt:'Amount'}; }
+let fieldTypes = JSON.parse(localStorage.getItem('myFieldTypes')||'null') || {};
+let pageState = {}; let showAllState = {}; const PAGE_SIZE = 20;
+function saveFieldTypes(){ localStorage.setItem(userKey('myFieldTypes'), JSON.stringify(fieldTypes)); }
+function saveTabs(){ localStorage.setItem(userKey('myTabs'), JSON.stringify(tabs)); localStorage.setItem(userKey('deletedTabIds'), JSON.stringify(deletedTabIds)); }
+function saveLabels(){ localStorage.setItem(userKey('myFieldLabels'), JSON.stringify(fieldLabels)); }
+function dedupeLabels(){
+  Object.keys(fieldLabels).forEach(type=>{
+    let seen=new Set(); let out={};
+    Object.keys(fieldLabels[type]||{}).forEach(k=>{
+      let lab=String(fieldLabels[type][k]||'').trim().toLowerCase();
+      if(seen.has(lab)) return;
+      seen.add(lab); out[k]=fieldLabels[type][k];
+    });
+    fieldLabels[type]=out;
+  });
+}
+dedupeLabels();
+function dedupeTabs(){
+  let seen = new Set(); let kept = [];
+  tabs.forEach(t=>{
+    let key = (t.label||'').trim().toLowerCase();
+    if(seen.has(key)){ if(!deletedTabIds.includes(t.id)) deletedTabIds.push(t.id); return; }
+    seen.add(key); kept.push(t);
+  });
+  tabs = kept;
+  localStorage.setItem('deletedTabIds', JSON.stringify(deletedTabIds));
+  return [];
+}
+(function(){ let seen=new Set(); let out=[]; tabs.forEach(t=>{ let k=(t.label||'').trim().toLowerCase(); if(!seen.has(k)){ seen.add(k); out.push(t); } else { if(!deletedTabIds.includes(t.id)) deletedTabIds.push(t.id); } }); tabs=out; localStorage.setItem('deletedTabIds', JSON.stringify(deletedTabIds)); })();
+function normalizeFieldOrder(){
+  dedupeLabels();
+  Object.keys(fieldLabels).forEach(type=>{
+    let labels = fieldLabels[type]; let vals = Object.values(labels).map(v=>String(v).toLowerCase());
+    let hasRef = vals.includes('ref'); let hasFirst = vals.some(v=>v.includes('firstname')); let hasLast = vals.some(v=>v.includes('lastname'));
+    if(hasRef && hasFirst && hasLast){
+      let desired = ['Ref','FirstName','LastName','Date','Amount','paymentStatus'];
+      let newLabels = {};
+      desired.forEach(w=>{ let k = Object.keys(labels).find(kk=> String(labels[kk]).toLowerCase()===w.toLowerCase()); if(k) newLabels[k]=labels[k]; });
+      Object.keys(labels).forEach(k=>{ if(!(k in newLabels)) newLabels[k]=labels[k]; });
+      fieldLabels[type]=newLabels;
+      if(!fieldTypes[type]) fieldTypes[type]={};
+      Object.keys(newLabels).forEach(k=>{ let lab = String(newLabels[k]).toLowerCase(); if(lab==='date') fieldTypes[type][k]='date'; else if(lab==='amount') fieldTypes[type][k]='number'; else if(lab.includes('firstname')||lab.includes('lastname')||lab==='ref'||lab.includes('paymentstatus')) fieldTypes[type][k]='text'; });
+    }
+  });
+  localStorage.setItem('myFieldLabels', JSON.stringify(fieldLabels)); localStorage.setItem('myFieldTypes', JSON.stringify(fieldTypes));
+}
+normalizeFieldOrder();
+function isMoneyLabel(label){ let l=(label||'').toLowerCase(); return l.includes('amount')||l.includes('total')||l.includes('price')||l.includes('pay')||l.includes('paid')||l.includes('cost')||l.includes('buy')||l.includes('sell')||l.includes('profit'); }
+function settingsDocId(){ return "settings_"+companyId; }
+async function syncTabsToCloud(){
+  if(!companyId) return;
+  try{ normalizeFieldOrder(); dedupeTabs(); await setDoc(doc(db,"items", settingsDocId()), {type:"__settings__", companyId, tabs, fieldLabels, fieldTypes, deletedTabIds, updatedAt:new Date()}, {merge:true}); }catch(e){ alert("Sync failed: "+e.message); throw e; }
+}
+async function loadTabsFromCloud(){
+  if(!companyId) return false;
+  try{
+    let snap = await getDoc(doc(db,"items", settingsDocId()));
+    if(!snap.exists()){ await syncTabsToCloud(); return true; }
+    let data = snap.data();
+    if(!data.tabs) return true;
+    (data.deletedTabIds||[]).forEach(id=>{ if(!deletedTabIds.includes(id)) deletedTabIds.push(id); });
+    let merged = [...tabs];
+    (data.tabs||[]).forEach(ct=>{ if(deletedTabIds.includes(ct.id)) return; if(!merged.some(t=>t.id===ct.id)) merged.push(ct); });
+    tabs = merged;
+    tabs = tabs.filter(t=> !deletedTabIds.includes(t.id));
+    dedupeTabs();
+    if(data.fieldLabels){
+      let newLabels = {};
+      Object.keys(data.fieldLabels).forEach(type=>{ newLabels[type]= {...data.fieldLabels[type]}; });
+      Object.keys(fieldLabels).forEach(type=>{ if(!newLabels[type]) newLabels[type]=fieldLabels[type]; });
+      fieldLabels = newLabels;
+      fieldTypes = {...fieldTypes, ...(data.fieldTypes||{})};
+      Object.keys(data.fieldTypes||{}).forEach(type=>{ fieldTypes[type]= {...data.fieldTypes[type]}; });
+    }
+    normalizeFieldOrder();
+    localStorage.setItem('myTabs', JSON.stringify(tabs)); localStorage.setItem('myFieldLabels', JSON.stringify(fieldLabels));
+localStorage.setItem('myFieldTypes', JSON.stringify(fieldTypes)); localStorage.setItem('deletedTabIds', JSON.stringify(deletedTabIds));
+    await syncTabsToCloud();
+    renderTabs(); renderAllCustom(); updActiveDashboard();
+    return true;
+  }catch(e){ console.log("load tabs failed", e); throw e; }
+}
+window.manualSync = async ()=>{
+  if(!companyId){ alert("Login first"); return; }
+  let badge=document.getElementById('syncBadge'); if(badge) badge.innerText="● Syncing... please wait";
+  try{
+    let ok = await loadTabsFromCloud();
+    if(badge) badge.innerText = "● Lists synced via items";
+    alert("Synced! Now you have "+tabs.length+" lists:\n\n"+tabs.map(t=>"- "+t.label).join("\n"));
+  }catch(e){
+    if(badge) badge.innerText="● Sync failed - see message";
+    alert("Sync failed: "+e.message+"\n\nCheck internet, then try again. Your data is still safe on this device.");
+  }
+};
+function getLabelsForTab(tab){ let type=tab.type; if(!fieldLabels[type]){ if(tab.isCustom || type.startsWith('custom_')){ fieldLabels[type]={}; } else { fieldLabels[type]={date:'Date', item:'Item', amt:'Amount'}; } } return fieldLabels[type]; }
+function getFieldType(tabType, key){
+  if(fieldTypes[tabType] && fieldTypes[tabType][key]) return fieldTypes[tabType][key];
+  if(key==='date') return 'date';
+  if(['amt','amount','litres','litre','price','cost','total','qty','quantity','mileage','miles','trips','paid','pay'].includes(key.toLowerCase())) return 'number';
+  return 'text';
+}
+function getRowsForTab(tab){
+  if(tab.type==='material') return mats;
+  if(tab.type==='mattress') return matts;
+  if(tab.type==='worker') return works;
+  if(tab.type==='expense') return exps;
+  return customItems[tab.id]||[];
+}
+function getNumberKeysForTab(tab){
+  if(tab.type==='material') return [{key:'total',label:'Total'},{key:'profit',label:'Profit'}];
+  if(tab.type==='mattress') return [{key:'total',label:'Total'}];
+  if(tab.type==='worker') return [{key:'pay',label:'Pay'},{key:'trips',label:'Trips'}];
+  if(tab.type==='expense') return [{key:'amt',label:'Amount'}];
+  let labels=getLabelsForTab(tab);
+  return Object.keys(labels).filter(k=> getFieldType(tab.type,k)==='number').map(k=>({key:k,label:labels[k]}));
+}
+function updActiveDashboard(){
+  let tab=tabs.find(t=>t.id===activeTab); if(!tab) return;
+  let title=document.getElementById('activeDashTitle'); if(title) title.innerText='📊 Dashboard - Active List: '+tab.label;
+  let rows=getRowsForTab(tab).filter(matchesDate);
+  let numKeys=getNumberKeysForTab(tab);
+  let html='<div style="display:flex;gap:12px;flex-wrap:wrap"><div style="background:#eef7ff;padding:14px;border-radius:10px;min-width:140px"><div style="color:#666;font-size:12px">TOTAL ROWS</div><div style="font-size:26px;font-weight:800">'+rows.length+'</div></div>';
+  numKeys.forEach(nk=>{
+    let vals=rows.map(r=>Number(r[nk.key])||0); let sum=vals.reduce((a,b)=>a+b,0); let cnt=vals.filter(v=>v!==0).length; let avg=vals.length? sum/vals.length:0;
+    let isProfit = nk.label.toLowerCase().includes('profit');
+    let extraClass = isProfit ? ' profit-box' : '';
+    let extraStyle = (isProfit && !showProfit) ? 'display:none;' : '';
+    html+='<div class="'+extraClass+'" style="background:#f7fff7;padding:14px;border-radius:10px;min-width:170px;'+extraStyle+'"><div style="color:#666;font-size:12px">'+nk.label.toUpperCase()+' - SUM</div><div style="font-size:22px;font-weight:800">£'+sum.toFixed(2)+'</div><div style="font-size:12px;color:#666">Count (non-zero): '+cnt+' • Avg: £'+avg.toFixed(2)+'</div></div>';
+  });
+  html+='</div>';
+  if(numKeys.length===0) html+='<p style="color:#888;font-size:13px">No Number fields in this list yet. Add one in Manage Fields → Add Field → Type = Number, then dashboard will count/sum it.</p>';
+  let labels=getLabelsForTab(tab);
+  let textKeys=Object.keys(labels).filter(k=> getFieldType(tab.type,k)==='text');
+  if(tab.type!=='material' && textKeys.length){
+    let firstText=textKeys[0]; let counts={};
+    rows.forEach(r=>{ let v=String(r[firstText]||'(empty)'); counts[v]=(counts[v]||0)+1; });
+    let top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    if(top.length) html+='<div style="margin-top:12px;font-size:13px"><b>Top '+labels[firstText]+':</b> '+top.map(([k,v])=>k+' ('+v+')').join(' • ')+'</div>';
+  }
+  let body=document.getElementById('activeDashBody'); if(body) body.innerHTML=html;
+}
+window.changePage = (tabId, dir)=>{ let cur=pageState[tabId]||0; let next=Math.max(0, cur+dir); pageState[tabId]=next; renderAll(); renderAllCustom(); updActiveDashboard(); };
+window.toggleShowAll = (tabId)=>{ showAllState[tabId]=!showAllState[tabId]; renderAll(); renderAllCustom(); };
+function renderPagination(tabId, total){
+  let el=document.getElementById('pag_'+tabId); if(!el) return;
+  if(showAllState[tabId]){ el.innerHTML='<div style="margin-top:10px;font-size:13px">Showing all '+total+' rows. <button class="pageBtn" onclick="toggleShowAll(\''+tabId+'\')">Show Paged (20 per page)</button></div>'; return; }
+  let cur=pageState[tabId]||0; let totalPages=Math.max(1, Math.ceil(total/PAGE_SIZE)); if(cur>=totalPages) { cur=totalPages-1; pageState[tabId]=cur; }
+  let from= total===0?0: cur*PAGE_SIZE+1; let to=Math.min(total,(cur+1)*PAGE_SIZE);
+  el.innerHTML='<div style="margin-top:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="pageBtn" '+(cur===0?'disabled':'')+' onclick="changePage(\''+tabId+'\',-1)">◀ Prev</button><span style="font-size:13px">Showing '+from+'-'+to+' of '+total+' • Page '+(cur+1)+' of '+totalPages+'</span><button class="pageBtn" '+(cur>=totalPages-1?'disabled':'')+' onclick="changePage(\''+tabId+'\',1)">Next ▶</button><button class="pageBtn" onclick="toggleShowAll(\''+tabId+'\')">Show All</button></div>';
+}
+function paginate(list, tabId){
+  if(showAllState[tabId]) return list;
+  let cur=pageState[tabId]||0; return list.slice(cur*PAGE_SIZE,(cur+1)*PAGE_SIZE);
+}
+window.togglePivot = ()=>{ let c=document.getElementById('pivotCard'); let show=c.style.display==='none'; c.style.display=show?'block':'none'; if(show){ buildPivotControls(); c.scrollIntoView({behavior:'smooth'}); } };
+function buildPivotControls(){
+  let opts=tabs.map(t=>'<option value="'+t.id+'">'+t.label+'</option>').join('');
+  let l1=document.getElementById('pivotList1'); let l2=document.getElementById('pivotList2');
+  if(l1) l1.innerHTML=opts; if(l2) l2.innerHTML=opts; if(l2 && tabs[1]) l2.value=tabs[1].id;
+  updatePivotFields();
+  if(l1) l1.onchange=updatePivotFields; if(l2) l2.onchange=updatePivotFields;
+}
+
+function updatePivotFields(){
+  let t1=tabs.find(t=>t.id===document.getElementById('pivotList1').value); let t2=tabs.find(t=>t.id===document.getElementById('pivotList2').value); if(!t1||!t2) return;
+  let labels1=getLabelsForTab(t1); let labels2=getLabelsForTab(t2);
+  let groupKeys=[...new Set([...Object.keys(labels1), ...Object.keys(labels2)])];
+  let g=document.getElementById('pivotGroup'); if(g) g.innerHTML=groupKeys.map(k=>'<option value="'+k+'">'+(labels1[k]||labels2[k]||k)+'</option>').join('');
+  let num1=getNumberKeysForTab(t1); let num2=getNumberKeysForTab(t2);
+  let n1=document.getElementById('pivotNum'); if(n1) n1.innerHTML=num1.map(n=>'<option value="'+n.key+'">'+n.label+'</option>').join('')||'<option value="">(no number field)</option>';
+  let n2=document.getElementById('pivotNum2'); if(n2) n2.innerHTML='<option value="">(same as List 1)</option>'+num2.map(n=>'<option value="'+n.key+'">'+n.label+'</option>').join('');
+}
+window.generatePivot = ()=>{
+  let t1=tabs.find(t=>t.id===document.getElementById('pivotList1').value); let t2=tabs.find(t=>t.id===document.getElementById('pivotList2').value);
+  let groupKey=document.getElementById('pivotGroup').value; let num1=document.getElementById('pivotNum').value; let num2=document.getElementById('pivotNum2').value||num1;
+  let rows1=getRowsForTab(t1); let rows2=getRowsForTab(t2);
+  let groups={};
+  rows1.forEach(r=>{ let g=String(r[groupKey]||'(empty)'); if(!groups[g]) groups[g]={c1:0,s1:0,c2:0,s2:0}; groups[g].c1++; groups[g].s1+=Number(r[num1])||0; });
+  rows2.forEach(r=>{ let g=String(r[groupKey]||'(empty)'); if(!groups[g]) groups[g]={c1:0,s1:0,c2:0,s2:0}; groups[g].c2++; groups[g].s2+=Number(r[num2])||0; });
+  let keys=Object.keys(groups).sort();
+  let total1=keys.reduce((a,k)=>a+groups[k].c1,0), totalS1=keys.reduce((a,k)=>a+groups[k].s1,0), total2=keys.reduce((a,k)=>a+groups[k].c2,0), totalS2=keys.reduce((a,k)=>a+groups[k].s2,0);
+  let html='<table><thead><tr><th>'+groupKey+'</th><th>'+t1.label+' Count</th><th>'+t1.label+' Sum</th><th>'+t2.label+' Count</th><th>'+t2.label+' Sum</th></tr></thead><tbody>';
+  keys.forEach(k=>{ html+='<tr><td>'+k+'</td><td>'+groups[k].c1+'</td><td>£'+groups[k].s1.toFixed(2)+'</td><td>'+groups[k].c2+'</td><td>£'+groups[k].s2.toFixed(2)+'</td></tr>'; });
+  html+='<tr style="font-weight:800;background:#eef7ff"><td>TOTAL</td><td>'+total1+'</td><td>£'+totalS1.toFixed(2)+'</td><td>'+total2+'</td><td>£'+totalS2.toFixed(2)+'</td></tr></tbody></table>';
+  html+='<p style="font-size:13px;color:#666">Grouped by '+groupKey+'. You can change Group By to any field both lists share.</p>';
+  document.getElementById('pivotResult').innerHTML=html;
+};
+let tabSearchText = ''; let showAllTabs = false; const MAX_TABS_SHOWN = 6;
+window.onTabSearch = (v)=>{ tabSearchText = (v||'').toLowerCase().trim(); renderTabs(); };
+window.toggleShowAllTabs = ()=>{ showAllTabs = !showAllTabs; renderTabs(); };
+window.printCurrentTab = ()=>{
+  let tab = tabs.find(t=>t.id===activeTab);
+  let label = tab ? tab.label : 'List';
+  let titleEl = document.getElementById('printTitle');
+  if(titleEl) titleEl.innerText = 'MaterialPro - ' + label + ' - ' + new Date().toLocaleDateString('en-GB');
+  document.querySelectorAll('#appScreen > .card, #customTabs > .card').forEach(el=> el.classList.remove('printActive'));
+  let activeEl = document.getElementById(activeTab) || document.getElementById('custom-'+activeTab);
+  if(activeEl) activeEl.classList.add('printActive');
+  setTimeout(()=> window.print(), 150);
+};
+window.addEventListener('afterprint', ()=>{ document.querySelectorAll('.printActive').forEach(el=> el.classList.remove('printActive')); });
+function requireFields(fields){ for(let f of fields){ if(!f.value || String(f.value).trim()===""){ alert("Please fill: "+f.label); let el=document.getElementById(f.id); if(el) el.focus(); return false; } } return true; }
+function requirePositive(fields){ for(let f of fields){ if(Number(f.value) <= 0){ alert(f.label+" must be greater than 0"); return false; } } return true; }
+function applyProfitUI(){
+  let btn=document.getElementById('profitToggleBtn');
+  if(btn) btn.innerText = showProfit ? '💰 Hide Profit' : '💰 Show Profit';
+  let hdr=document.getElementById('profitHeader');
+  if(hdr) hdr.style.display = showProfit ? '' : 'none';
+  document.querySelectorAll('.profit-box').forEach(el=>{
+    el.style.display = showProfit ? 'block' : 'none';
+  });
+}
+window.toggleProfit = ()=>{ showProfit=!showProfit; localStorage.setItem('showProfit', showProfit?'yes':'no'); applyProfitUI(); renderAll(); upd(); };
+function matchesDate(m){ let from=document.getElementById('fromDate')?.value; let to=document.getElementById('toDate')?.value; if(!from && !to) return true; if(!m.date) return true; if(from && m.date < from) return false; if(to && m.date > to) return false; return true; }
+window.setDateFilter = (type)=>{ let today=new Date(); let fromEl=document.getElementById('fromDate'); let toEl=document.getElementById('toDate'); let iso=(d)=>d.toISOString().slice(0,10); if(type==='all'){ fromEl.value=''; toEl.value=''; } if(type==='today'){ fromEl.value=iso(today); toEl.value=iso(today); } if(type==='week'){ let d=new Date(today); d.setDate(d.getDate()-7); fromEl.value=iso(d); toEl.value=iso(today); } if(type==='month'){ let d=new Date(today); d.setDate(1); fromEl.value=iso(d); toEl.value=iso(today); } if(type==='year'){ let d=new Date(today.getFullYear(),0,1); fromEl.value=iso(d); toEl.value=iso(today); } let hint=document.getElementById('dateHint'); if(hint) hint.innerText = (!fromEl.value && !toEl.value) ? 'Showing all dates. Pick From-To to filter, even after 2 years of entries.' : 'Showing: ' + (fromEl.value||'...') + ' to ' + (toEl.value||'...'); renderAll(); renderAllCustom(); updActiveDashboard(); };
+function updateAdminUI(){ let admin=isAdmin(); let canManage=canManageTabsFields(); let mt=document.getElementById('manageTabsBtn'); let mf=document.getElementById('manageFieldsBtn'); let inv=document.getElementById('inviteBtn'); let hint=document.getElementById('roleHint'); let emptyBtn=document.getElementById('emptyTrashBtn'); let trashHint=document.getElementById('trashHint'); if(mt) mt.style.display = canManage ? 'inline-block' : 'none'; if(mf) mf.style.display = canManage ? 'inline-block' : 'none'; if(inv) inv.style.display = admin ? 'inline-block' : 'none'; document.querySelectorAll('.clearBtn').forEach(b => b.style.display = admin ? 'inline-block' : 'none'); if(emptyBtn) emptyBtn.style.display = admin ? 'inline-block' : 'none'; if(trashHint) trashHint.innerText = admin ? "Deleted rows go here. You can Restore them or Delete Forever. Only Admin can Empty Trash." : "Deleted rows go here. You can Restore them. Only Admin can Delete Forever."; if(hint) hint.innerText = admin ? "Admin: Manage Tabs, Manage Fields, Invite Staff, Empty Trash." : (userRole==='buyer' ? "Client: You can Manage Tabs / Fields for YOUR company only. Only Admin can Invite Staff / Empty Trash." : "Staff: You can Add, Edit and Delete ONE row at a time (goes to Trash). You can Restore. Only Admin / Client can Manage Tabs / Fields."); applyProfitUI(); }
+
+
+window.cleanDuplicates = async ()=>{
+  if(!isAdmin()){ alert("Only Admin can clean duplicates."); return; }
+  if(!confirm("Clean duplicates? This keeps 1 copy of each row and moves the extra copies to Trash. You can restore from Trash if needed.")) return;
+  let seen = new Set(); let dupCount = 0;
+  for(let tabId of Object.keys(customItems)){
+    for(let item of [...customItems[tabId]]){
+      let copy = {...item}; delete copy.id; delete copy.createdAt;
+      let key = tabId + "||" + JSON.stringify(copy);
+      if(seen.has(key)){
+        await moveToTrash(item);
+        try{ await deleteDoc(doc(db,"items",item.id)); }catch(e){}
+        let idx = customItems[tabId].findIndex(x=>x.id===item.id);
+        if(idx!==-1) customItems[tabId].splice(idx,1);
+        dupCount++;
+      } else { seen.add(key); }
+    }
+  }
+  let allLists = [mats, matts, works, exps];
+  for(let arr of allLists){
+    let seen2 = new Set();
+    for(let item of [...arr]){
+      let copy2 = {...item}; delete copy2.id; delete copy2.createdAt;
+      let key2 = item.type + "||" + JSON.stringify(copy2);
+      if(seen2.has(key2)){
+        await moveToTrash(item);
+        try{ await deleteDoc(doc(db,"items",item.id)); }catch(e){}
+        let idx2 = arr.findIndex(x=>x.id===item.id);
+        if(idx2!==-1) arr.splice(idx2,1);
+        dupCount++;
+      } else { seen2.add(key2); }
+    }
+  }
+  renderAll(); renderAllCustom(); upd(); updActiveDashboard();
+  alert("Cleaned " + dupCount + " duplicate rows. Kept 1 of each. Check Trash if you need to restore.");
+};
+
+
+
+
+function renderTabs(){
+  const bar=document.getElementById('tabBar'); if(!bar) return;
+  let filtered = tabs.filter(t=> !tabSearchText || t.label.toLowerCase().includes(tabSearchText));
+  let visible = filtered; let hiddenCount = 0;
+  if(!tabSearchText && !showAllTabs && filtered.length > MAX_TABS_SHOWN){
+    visible = filtered.slice(0, MAX_TABS_SHOWN);
+    if(!visible.some(t=>t.id===activeTab)){ let active = filtered.find(t=>t.id===activeTab); if(active) visible = [active, ...visible.slice(0, MAX_TABS_SHOWN-1)]; }
+    hiddenCount = filtered.length - visible.length;
+  }
+  bar.innerHTML = visible.map(t=> `<button class="tabBtn ${t.id===activeTab?'active':''}" onclick="showTab('${t.id}')">${t.label}</button>`).join('') || '<span style="color:#888;font-size:13px">No lists match. Clear filter.</span>';
+  let btn=document.getElementById('showAllTabsBtn'); if(btn) btn.innerText = showAllTabs ? 'Show Fewer Lists ▲' : (hiddenCount>0 ? `Show All Lists ▼ (+${hiddenCount} more)` : 'Show All Lists ▼');
+  let hint=document.getElementById('tabCountHint'); if(hint) hint.innerText = `Showing ${visible.length} of ${tabs.length} lists`;
+  tabs.forEach(t=>{ let el=document.getElementById(t.id+'Title'); if(el) el.innerText='Add '+t.label; });
+}
+window.showTab = (id)=>{ activeTab=id; tabs.forEach(t=>{ let el=document.getElementById(t.id); if(el) el.style.display=(t.id===id?'block':'none'); let cel=document.getElementById('custom-'+t.id); if(cel) cel.style.display=(t.id===id?'block':'none'); }); renderTabs(); updActiveDashboard(); };
+window.closeManagePanels = ()=>{ document.getElementById('manageTabsPanel').style.display='none'; document.getElementById('manageFieldsPanel').style.display='none'; };
+window.manageTabs = ()=>{ if(!canManageTabsFields()){ alert("Only Admin or Client can manage tabs."); return; } document.getElementById('manageFieldsPanel').style.display='none'; let p=document.getElementById('manageTabsPanel'); let show=p.style.display==='none'; p.style.display=show?'block':'none'; if(show){ let sel=document.getElementById('mtSelect'); sel.innerHTML=tabs.map(t=>'<option value="'+t.id+'">'+t.label+'</option>').join(''); document.getElementById('mtMsg').innerText=''; p.scrollIntoView({behavior:'smooth'}); } };
+window.manageFields = ()=>{ if(!canManageTabsFields()){ alert("Only Admin or Client can manage fields."); return; } document.getElementById('manageTabsPanel').style.display='none'; let p=document.getElementById('manageFieldsPanel'); let show=p.style.display==='none'; p.style.display=show?'block':'none'; if(show){ let sel=document.getElementById('mfTabSelect'); sel.innerHTML=tabs.map(t=>'<option value="'+t.id+'">'+t.label+'</option>').join(''); sel.value=activeTab; refreshFieldSelect(); document.getElementById('mfMsg').innerText=''; p.scrollIntoView({behavior:'smooth'}); } };
+window.refreshFieldSelect = ()=>{
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return;
+  let labels=getLabelsForTab(tab); let keys=Object.keys(labels);
+  let sel=document.getElementById('mfFieldSelect');
+  sel.innerHTML = keys.length? keys.map(k=>'<option value="'+k+'">'+labels[k]+' ['+getFieldType(tab.type,k)+']</option>').join('') : '<option value="">(No fields yet)</option>';
+  document.getElementById('mfCurrent').innerText = keys.length? 'Current fields: '+keys.map(k=>labels[k]).join(', ') : 'No fields yet - add your first field below.';
+  document.getElementById('mfReorder').value = keys.map(k=>labels[k]).join(', ');
+};
+window.doAddTab = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let name=document.getElementById('mtNewName').value.trim(); if(!name){ document.getElementById('mtMsg').innerText='Type a name first.'; return; }
+  if(tabs.some(t=> t.label.trim().toLowerCase()===name.toLowerCase())){ document.getElementById('mtMsg').innerText="That list already exists!"; return; }
+  let id='custom_'+name.toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now(); let type='custom_'+name.toLowerCase().replace(/[^a-z0-9]/g,''); tabs.push({id:id, label:name, type:type, isCustom:true}); customItems[id]=[]; fieldLabels[type]={}; fieldTypes[type]={}; saveLabels(); saveFieldTypes(); saveTabs(); try{ await syncTabsToCloud(); document.getElementById('mtMsg').innerText="New list '"+name+"' created with NO default fields and synced! Now click Manage Fields to add fields."; }catch(e){ document.getElementById('mtMsg').innerText="Created locally, but sync failed: "+e.message; }
+  renderTabs(); renderCustomTab(id, name, type); showTab(id); document.getElementById('mtNewName').value=''; let sel=document.getElementById('mtSelect'); sel.innerHTML=tabs.map(t=>'<option value="'+t.id+'">'+t.label+'</option>').join('');
+};
+window.doRenameTab = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let id=document.getElementById('mtSelect').value; let tab=tabs.find(t=>t.id===id); if(!tab) return;
+  let newName=document.getElementById('mtNewName').value.trim(); if(!newName){ document.getElementById('mtMsg').innerText='Type a new name first.'; return; }
+  if(tabs.some((t)=> t.id!==id && t.label.trim().toLowerCase()===newName.toLowerCase())){ document.getElementById('mtMsg').innerText="A list with that name already exists!"; return; }
+  tab.label=newName; saveTabs(); try{ await syncTabsToCloud(); document.getElementById('mtMsg').innerText="Renamed to '"+newName+"' and synced!"; }catch(e){ document.getElementById('mtMsg').innerText="Renamed locally, sync failed: "+e.message; }
+  renderTabs(); updActiveDashboard(); let sel=document.getElementById('mtSelect'); sel.innerHTML=tabs.map(t=>'<option value="'+t.id+'">'+t.label+'</option>').join(''); sel.value=id;
+};
+window.doDeleteTab = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let id=document.getElementById('mtSelect').value; let idx=tabs.findIndex(t=>t.id===id); if(idx===-1) return; let t=tabs[idx];
+  if(!confirm("Move TAB '"+t.label+"' and ALL its rows to Trash? You can restore later.")) return;
+  let arr=t.type==="material"?mats : t.type==="mattress"?matts : t.type==="worker"?works : t.type==="expense"?exps : (customItems[t.id]||[]);
+  for(let item of [...arr]){ await moveToTrash(item); try{ await deleteDoc(doc(db,"items",item.id)); }catch(e){} }
+  if(t.type==="material") mats=[]; if(t.type==="mattress") matts=[]; if(t.type==="worker") works=[]; if(t.type==="expense") exps=[]; if(t.isCustom){ delete customItems[t.id]; let el=document.getElementById('custom-'+t.id); if(el) el.remove(); } else { let el=document.getElementById(t.id); if(el) el.remove(); }
+  if(!deletedTabIds.includes(t.id)) deletedTabIds.push(t.id); tabs.splice(idx,1); saveTabs(); try{ await syncTabsToCloud(); document.getElementById('mtMsg').innerText="Tab moved to Trash and synced - it will NOT come back."; }catch(e){ document.getElementById('mtMsg').innerText="Deleted locally, sync failed: "+e.message; }
+  activeTab=tabs[0]?tabs[0].id:''; renderTabs(); renderAll(); upd(); updActiveDashboard(); if(activeTab) showTab(activeTab);
+  let sel=document.getElementById('mtSelect'); sel.innerHTML=tabs.map(x=>'<option value="'+x.id+'">'+x.label+'</option>').join('');
+};
+window.doAddField = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return;
+  let labels=getLabelsForTab(tab); let newName=document.getElementById('mfNewName').value.trim(); if(!newName){ document.getElementById('mfMsg').innerText='Type a field name first.'; return; }
+  if(Object.values(labels).some(v=> String(v).trim().toLowerCase()===newName.toLowerCase())){ document.getElementById('mfMsg').innerText="That field already exists!"; return; }
+  let key=newName.toLowerCase().replace(/[^a-z0-9]/g,''); if(!key){ document.getElementById('mfMsg').innerText='Invalid name'; return; } if(labels[key]){ document.getElementById('mfMsg').innerText="That field already exists!"; return; }
+  let ftype=document.getElementById('mfNewType').value; labels[key]=newName; if(!fieldTypes[tab.type]) fieldTypes[tab.type]={}; fieldTypes[tab.type][key]=ftype; saveLabels(); saveFieldTypes(); try{ await syncTabsToCloud(); document.getElementById('mfMsg').innerText="Field '"+newName+"' added as "+ftype.toUpperCase()+" and synced!"; }catch(e){ document.getElementById('mfMsg').innerText="Added locally, sync failed: "+e.message; }
+  renderAll(); renderAllCustom(); updActiveDashboard(); refreshFieldSelect(); document.getElementById('mfNewName').value='';
+};
+window.doRenameField = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return; let labels=getLabelsForTab(tab); let key=document.getElementById('mfFieldSelect').value; if(!key){ document.getElementById('mfMsg').innerText='Pick a field first.'; return; }
+  let newName=document.getElementById('mfNewName').value.trim(); if(!newName){ document.getElementById('mfMsg').innerText='Type a new name first.'; return; }
+  if(Object.keys(labels).some(k=> k!==key && String(labels[k]).trim().toLowerCase()===newName.toLowerCase())){ document.getElementById('mfMsg').innerText="A field called '"+newName+"' already exists!"; return; }
+  labels[key]=newName; saveLabels(); try{ await syncTabsToCloud(); document.getElementById('mfMsg').innerText="Field renamed to '"+newName+"' and synced!"; }catch(e){ document.getElementById('mfMsg').innerText="Renamed locally, sync failed: "+e.message; }
+  renderAll(); renderAllCustom(); updActiveDashboard(); refreshFieldSelect();
+};
+window.doDeleteField = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return; let labels=getLabelsForTab(tab); let key=document.getElementById('mfFieldSelect').value; if(!key){ document.getElementById('mfMsg').innerText='Pick a field first.'; return; }
+  if(!confirm("Delete field '"+labels[key]+"' from "+tab.label+"? It will NOT come back.")) return;
+  delete labels[key]; if(fieldTypes[tab.type]) delete fieldTypes[tab.type][key]; saveLabels(); saveFieldTypes(); try{ await syncTabsToCloud(); document.getElementById('mfMsg').innerText="Field deleted and synced - it will NOT come back."; }catch(e){ document.getElementById('mfMsg').innerText="Deleted locally, sync failed: "+e.message; }
+  renderAll(); renderAllCustom(); updActiveDashboard(); refreshFieldSelect();
+};
+window.doChangeFieldType = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return; let key=document.getElementById('mfFieldSelect').value; if(!key){ document.getElementById('mfMsg').innerText='Pick a field first.'; return; }
+  let ftype=document.getElementById('mfNewType').value; if(!fieldTypes[tab.type]) fieldTypes[tab.type]={}; fieldTypes[tab.type][key]=ftype; saveFieldTypes(); try{ await syncTabsToCloud(); document.getElementById('mfMsg').innerText="Field type changed to "+ftype.toUpperCase()+" and synced!"; }catch(e){ document.getElementById('mfMsg').innerText="Changed locally, sync failed: "+e.message; }
+  renderAll(); renderAllCustom(); updActiveDashboard(); refreshFieldSelect();
+};
+window.doReorderFields = async ()=>{
+  if(!canManageTabsFields()){ alert("Only Admin or Client can do this."); return; }
+  let tabId=document.getElementById('mfTabSelect').value; let tab=tabs.find(t=>t.id===tabId); if(!tab) return; let labels=getLabelsForTab(tab); let keys=Object.keys(labels);
+  let order=document.getElementById('mfReorder').value; if(!order.trim()){ document.getElementById('mfMsg').innerText='Type the new order first.'; return; }
+  let wanted=order.split(",").map(s=>s.trim()).filter(Boolean); let newLabels={}; let used=new Set(); wanted.forEach(w=>{ let foundKey=keys.find(k=> labels[k].toLowerCase()===w.toLowerCase() || k.toLowerCase()===w.toLowerCase()); if(foundKey && !used.has(foundKey)){ newLabels[foundKey]=labels[foundKey]; used.add(foundKey); } }); keys.forEach(k=>{ if(!used.has(k)){ newLabels[k]=labels[k]; } }); fieldLabels[tab.type]=newLabels; saveLabels(); try{ await syncTabsToCloud(); document.getElementById('mfMsg').innerText="Reordered and synced! New order: "+Object.values(newLabels).join(", "); }catch(e){ document.getElementById('mfMsg').innerText="Reordered locally, sync failed: "+e.message; }
+  renderAll(); renderAllCustom(); updActiveDashboard(); refreshFieldSelect();
+};
+function renderCustomTab(id, label, type){
+  let tab = tabs.find(t=>t.id===id) || {id, label, type};
+  let labels = getLabelsForTab(tab); let keys = Object.keys(labels);
+  let existing = document.getElementById('custom-'+id);
+  let inputsHtml = keys.length===0 ? '<p style="color:#888;font-size:13px">No fields yet. Click <b>Manage Fields</b> to add your own fields for this list.</p>' : keys.map(k=>{ let lab = labels[k]; let ft = getFieldType(type, k); if(ft==='date') return `<input id="c_${k}_${id}" type="date">`; if(ft==='number') return `<input id="c_${k}_${id}" type="number" placeholder="${lab}">`; return `<input id="c_${k}_${id}" type="text" placeholder="${lab} *">`; }).join('');
+  let headHtml = keys.map(k=>`<th>${labels[k]}</th>`).join('') + '<th>Action</th>';
+  let inner = `<h3>Add ${label}</h3>${inputsHtml}<button class="addBtn" onclick="addCustom('${id}','${type}')">Add ${label}</button><br><br><button class="clearBtn" onclick="clearTab('${type}','${id}')">⚠️ Move ALL in this Tab to Trash</button><table><thead><tr>${headHtml}</tr></thead><tbody id="list_${id}"></tbody></table><div id="pag_${id}"></div>`;
+  if(existing){ existing.innerHTML = inner; updateAdminUI(); return; }
+  let div=document.createElement('div'); div.id='custom-'+id; div.className='card'; div.style.display='none';
+  div.innerHTML=inner;
+  document.getElementById('customTabs').appendChild(div); updateAdminUI();
+}
+function matchesSearch(m){ if(!matchesDate(m)) return false; let q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim(); if(!q) return true; return JSON.stringify(m).toLowerCase().includes(q); }
+function renderAllCustom(){
+  tabs.forEach(t=>{
+    if(t.isCustom || t.type==='petrol' || t.label==='Petrol' || document.getElementById('custom-'+t.id)){
+      renderCustomTab(t.id, t.label, t.type);
+      let labels = getLabelsForTab(t); let keys = Object.keys(labels);
+      let fullList=(customItems[t.id]||[]).filter(matchesSearch);
+      let list=paginate(fullList, t.id);
+      let tbody=document.getElementById('list_'+t.id); if(!tbody) return;
+      tbody.innerHTML=list.map((m,idx)=>{
+        let realIdx=fullList.indexOf(m);
+        if(editingId===m.id){
+          let cells = keys.map(k=>{ let v = m[k] ?? ''; let ft = getFieldType(t.type, k); if(ft==='date') return `<td><input class="rowInput" id="e_${k}_${m.id}" type="date" value="${v}"></td>`; if(ft==='number') return `<td><input class="rowInput" id="e_${k}_${m.id}" type="number" value="${v}"></td>`; return `<td><input class="rowInput" id="e_${k}_${m.id}" type="text" value="${v}"></td>`; }).join('');
+          return `<tr class="editingRow">${cells}<td><button class="saveBtn" onclick="saveEdit('${m.id}','custom','${t.id}')">Save</button> <button class="cancelBtn" onclick="cancelEdit()">Cancel</button></td></tr>`;
+        }
+        let cells = keys.map(k=>{ let v = m[k] ?? ''; let lab = labels[k]||''; if(isMoneyLabel(lab) && v!=='' && !isNaN(Number(v))) return `<td>£${v}</td>`; return `<td>${v}</td>`; }).join('');
+        return `<tr>${cells}<td><button class="editBtn" onclick="editItem('${m.id}','custom','${t.id}')">Edit</button> <button class="delBtn" onclick="delItem('${m.id}','${t.id}',${realIdx})">Delete</button></td></tr>`;
+      }).join('');
+      renderPagination(t.id, fullList.length);
+    }
+  });
+}
+window.renderAllCustom = renderAllCustom;
+window.renderAll = renderAll;
+window.addCustom = async (id, type)=>{
+  let tab = tabs.find(t=>t.id===id); if(!tab) return;
+  let labels = getLabelsForTab(tab); let keys = Object.keys(labels);
+  if(keys.length===0){ alert("This list has no fields yet! Click Manage Fields to add fields first."); return; }
+  let obj = {type: type, companyId, customTabId:id, addedBy: currentUser ? currentUser.uid : "", createdAt: new Date()};
+  for(let k of keys){ let el = document.getElementById(`c_${k}_${id}`); let val = el ? el.value : ""; let ft = getFieldType(type, k); if(ft==='date') obj[k] = val || new Date().toISOString().slice(0,10); else if(ft==='number') obj[k] = val ? Number(val) : 0; else obj[k] = val ? val.trim() : ""; }
+  let firstTextKey = keys.find(k=> getFieldType(type,k)==='text');
+  if(firstTextKey && !obj[firstTextKey]){ alert("Please fill: "+labels[firstTextKey]); return; }
+  let _refVal = (obj.ref || obj.Ref || obj.REF || obj[firstTextKey] || "").toString().trim().toLowerCase();
+  if (_refVal) {
+    const _existing = await window.getExistingRefs();
+    const _key = id + "||" + _refVal;
+    const _inMemory = (customItems[id] || []).some(it => (it.ref || it.Ref || "").toString().trim().toLowerCase() === _refVal);
+    if (_existing.has(_key) || _inMemory) {
+      alert("Already exists! Ref '" + _refVal + "' is already in this list. Not added again. 🛡️");
+      return;
+    }
+  }
+  let r = await addDoc(collection(db,"items"), obj);
+  let saved = {...obj, id:r.id}; if(!customItems[id]) customItems[id]=[]; customItems[id].push(saved); renderAllCustom(); upd(); updActiveDashboard();
+  keys.forEach(k=>{ let el=document.getElementById(`c_${k}_${id}`); if(el) el.value=''; });
+};
+function trashLabel(t){ if(t.type==="material") return t.item+" - Qty "+t.qty+" - £"+(t.total||0); if(t.type==="mattress") return (t.mattressType||"Mattress")+" - Qty "+t.qty+" - £"+(t.total||0); if(t.type==="worker") return (t.name||"")+" - "+(t.carried||"")+" - £"+(t.pay||0); if(t.type==="expense") return (t.item||"")+" - £"+(t.amt||0); return (t.item||"Custom")+" - £"+(t.amt||t.total||0) + (t.litres ? " - "+t.litres+" Litres" : ""); }
+function trashName(t){ return t.item || t.mattressType || t.name || t.ref || "Item"; }
+async function moveToTrash(item){ let trashDoc = { companyId, originalId:item.id, type:item.type, customTabId:item.customTabId||"", data:item, deletedAt:new Date().toISOString(), deletedBy: currentUser ? currentUser.uid : "" }; let r = await addDoc(collection(db,"trash"), trashDoc); trashDoc.id = r.id; trashItems.push(trashDoc); renderTrash(); }
+function renderTrash(){ document.getElementById('trashCount').innerText = trashItems.length; let tbody=document.getElementById('trashList'); if(!tbody) return; if(trashItems.length===0){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#888">Trash is empty. Good - nothing deleted.</td></tr>'; return; } let admin=isAdmin(); tbody.innerHTML = trashItems.map((t,i)=>{ let d = t.data || {}; let delDate = t.deletedAt ? new Date(t.deletedAt).toLocaleString() : ""; let permBtn = admin ? `<button class="permDelBtn" onclick="permDeleteItem(${i})">Delete Forever</button>` : `<span style="font-size:11px;color:#888">Ask Admin to delete forever</span>`; return `<tr><td>${delDate}</td><td>${t.type}</td><td><b>${trashName(d)}</b></td><td>${trashLabel(d)}</td><td><button class="restoreBtn" onclick="restoreItem(${i})">↩ Restore</button> ${permBtn}</td></tr>`; }).join(''); }
+window.toggleTrash = ()=>{ trashOpen=!trashOpen; document.getElementById('trashCard').style.display = trashOpen ? 'block' : 'none'; if(trashOpen){ renderTrash(); document.getElementById('trashCard').scrollIntoView({behavior:'smooth'}); } };
+window.restoreItem = async (idx)=>{ let t = trashItems[idx]; if(!t) return; if(!confirm("Restore '"+trashName(t.data)+"' back to its tab?")) return; try{ let newData = {...t.data}; delete newData.id; let r = await addDoc(collection(db,"items"), newData); let restored = {...newData, id:r.id}; if(restored.type==="material") mats.push(restored); else if(restored.type==="mattress") matts.push(restored); else if(restored.type==="worker") works.push(restored); else if(restored.type==="expense") exps.push(restored); else { let tabId = restored.customTabId || 'custom_'+restored.type; if(!customItems[tabId]) customItems[tabId]=[]; customItems[tabId].push(restored); } await deleteDoc(doc(db,"trash", t.id)); trashItems.splice(idx,1); renderTrash(); renderAll(); renderAllCustom(); upd(); updActiveDashboard(); alert("Restored! ✅"); }catch(e){ alert(e.message); } };
+window.permDeleteItem = async (idx)=>{ if(!isAdmin()){ alert("Only Admin can Delete Forever. Ask your Admin."); return; } let t = trashItems[idx]; if(!t) return; if(!confirm("DELETE FOREVER '"+trashName(t.data)+"'?\nThis CANNOT be undone.")) return; await deleteDoc(doc(db,"trash", t.id)); trashItems.splice(idx,1); renderTrash(); alert("Deleted forever."); };
+window.emptyTrash = async ()=>{ if(!isAdmin()){ alert("Only Admin can Empty Trash."); return; } if(trashItems.length===0){ alert("Trash already empty."); return; } if(!confirm("Empty Trash? Delete ALL "+trashItems.length+" items FOREVER?")) return; let typed = prompt("Type CLEAR to empty trash forever:"); if(typed!=="CLEAR"){ alert("Cancelled."); return; } for(let t of [...trashItems]){ try{ await deleteDoc(doc(db,"trash", t.id)); }catch(e){} } trashItems=[]; renderTrash(); alert("Trash emptied."); };
+async function loadTrash(){ trashItems=[]; const q=query(collection(db,"trash"), where("companyId","==",companyId)); const snap=await getDocs(q); snap.forEach(d=>{ trashItems.push({id:d.id, ...d.data()}); }); renderTrash(); }
+window.clearTab = async (type, customId)=>{ if(!isAdmin()){ alert("Only Admin can clear a whole tab."); return; } let arr=type==="material"?mats : type==="mattress"?matts : type==="worker"?works : type==="expense"?exps : (customItems[customId]||[]); if(arr.length===0){ alert("This tab is already empty."); return; } if(!confirm("Move ALL "+arr.length+" rows in this tab to Trash?\nYou can restore them later from Trash.")) return; for(let item of [...arr]){ await moveToTrash(item); let unique = arr.filter(m=>m.id===item.id).length; if(unique<=1){ try{ await deleteDoc(doc(db,"items",item.id)); }catch(e){} } } if(type==="material") mats=[]; if(type==="mattress") matts=[]; if(type==="worker") works=[]; if(type==="expense") exps=[]; if(customId) customItems[customId]=[]; renderAll(); renderAllCustom(); upd(); updActiveDashboard(); alert("Moved "+arr.length+" rows to Trash! Open Trash to restore."); };
+window.exportCSV = ()=>{ let rows=[["Date","Tab","Item","Qty","Buy","Sell","Total","Profit / Amount"]]; mats.filter(matchesSearch).forEach(m=> rows.push([m.date,"Materials",m.item,m.qty,getBuy(m),getSell(m),m.total,m.profit])); matts.filter(matchesSearch).forEach(m=> rows.push([m.date,"Mattresses",m.mattressType,m.qty,"","",m.total,m.total])); works.filter(matchesSearch).forEach(m=> rows.push([m.date,"Workers",m.name+" - "+m.carried,m.trips,"","",m.pay,m.paid])); exps.filter(matchesSearch).forEach(m=> rows.push([m.date,"Expenses",m.item,"","","",m.amt,m.amt])); Object.keys(customItems).forEach(k=>{ customItems[k].filter(matchesSearch).forEach(m=> rows.push([m.date,"Custom",m.item,"","","",m.amt,m.amt])); }); let csv = rows.map(r=> r.map(c=> '"'+String(c??'').replace(/"/g,'""')+'"').join(",")).join("\n"); let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='MaterialPro-Export-'+new Date().toISOString().slice(0,10)+'.csv'; a.click(); alert("Exported! Only filtered rows exported."); };
+window.forgotPass = async ()=>{ let email=document.getElementById('email').value.trim(); if(!email){ email=prompt("Enter your email for password reset:"); if(!email) return; } try{ await sendPasswordResetEmail(auth, email); alert("Password reset email sent to "+email); }catch(e){ alert(e.message); } };
+window.inviteStaff = async ()=>{ if(!isAdmin()){ alert("Only Admin can invite staff."); return; } let email=prompt("Staff email to invite:"); if(!email||!email.trim()) return; let name=prompt("Staff name:"); if(!name) name=email.split('@')[0]; let tempPass=prompt("Set a temporary password:", "Temp1234!"); if(!tempPass) return; let newRole=prompt("Role? Type staff or buyer:", "buyer"); if(!newRole) newRole="buyer"; let newCompanyId=(newRole==="buyer") ? "company_"+email.trim().toLowerCase().replace(/[^a-z0-9]/gi,'_') : companyId; try{ const cred=await createUserWithEmailAndPassword(secondaryAuth, email.trim(), tempPass); await setDoc(doc(db,"users",cred.user.uid), {email:email.trim(), name:name, companyId:newCompanyId, role:newRole, createdAt:new Date()}); await signOut(secondaryAuth); alert(newRole +"invited!\n\nEmail: "+email+"\nTemp Password: "+tempPass); }catch(e){ alert("Invite failed: "+e.message); } };
+window.doLogin = async ()=>{ const email=document.getElementById('email').value.trim(); const pass=document.getElementById('pass').value; if(!email||!pass){ document.getElementById('msg').innerText="Enter email and password"; return; } try{ const cred=await signInWithEmailAndPassword(auth, email, pass); const userDoc=await getDoc(doc(db,"users",cred.user.uid)); if(!userDoc.exists()){ document.getElementById('msg').innerText="User not in users collection."; return; } const data=userDoc.data(); companyId=data.companyId; currentUser={uid:cred.user.uid,...data}; loadUserTabs(); userRole=data.role||"staff"; applyUserUI(data); renderTabs(); await loadTabsFromCloud(); loadData(); loadTrash(); }catch(e){ document.getElementById('msg').innerText=e.message; } };
+function applyUserUI(data){ document.getElementById('welcome').innerText="Hi "+(data.name||""); document.getElementById('companyBadge').innerText="Company: "+companyId; document.getElementById('roleBadge').innerText="Role: "+(data.role||"staff"); document.getElementById('loginScreen').style.display='none'; document.getElementById('appScreen').style.display='block'; updateAdminUI(); applyProfitUI(); }
+window.doLogout = async ()=>{ await signOut(auth); location.reload(); };
+onAuthStateChanged(auth, async (user)=>{ if(user && !currentUser){ const userDoc=await getDoc(doc(db,"users",user.uid)); if(userDoc.exists()){ const data=userDoc.data(); companyId=data.companyId; currentUser={uid:user.uid,...data}; loadUserTabs(); userRole=data.role||"staff"; applyUserUI(data); renderTabs(); await loadTabsFromCloud(); loadData(); loadTrash(); } } });
+async function loadData(){ mats=[]; matts=[]; works=[]; exps=[]; customItems={}; const q=query(collection(db,"items"), where("companyId","==",companyId)); const snap=await getDocs(q); let seen=new Set(); snap.forEach(d=>{ if(seen.has(d.id)) return; seen.add(d.id); const x={id:d.id,...d.data()}; if(x.type==="__settings__") return; if(x.type==="material"){ if(x.buyPrice===undefined && x.qty && x.total!==undefined){ let sell=x.qty?x.total/x.qty:0; let profitPer=x.qty?(x.profit||0)/x.qty:0; x.buyPrice=sell-profitPer; } mats.push(x); } else if(x.type==="mattress") matts.push(x); else if(x.type==="worker") works.push(x); else if(x.type==="expense") exps.push(x); else { let tabId=x.customTabId||'custom_'+x.type; if(!customItems[tabId]) customItems[tabId]=[]; customItems[tabId].push(x); } }); renderAll(); renderAllCustom(); upd(); updActiveDashboard(); updateAdminUI(); }
+function getBuy(m){ if(m.buyPrice!==undefined && m.buyPrice!==null && m.buyPrice!=="") return Number(m.buyPrice); let sell=m.qty?m.total/m.qty:0; let profitPer=m.qty?(m.profit||0)/m.qty:0; return sell-profitPer; }
+function getSell(m){ return m.qty?m.total/m.qty:0; }
+function renderAll(){
+let full1=mats.filter(matchesSearch); let full2=matts.filter(matchesSearch); let full3=works.filter(matchesSearch); let full4=exps.filter(matchesSearch);
+let el1=document.getElementById('matList'); if(el1) el1.innerHTML=paginate(full1,'mat').map((m,idx)=>{ if(editingId===m.id){ let sell=getSell(m); let buy=getBuy(m); return `<tr class="editingRow"><td><input class="rowInput" id="e_date_${m.id}" type="date" value="${m.date||''}"></td><td><input class="rowInput" id="e_item_${m.id}" value="${m.item||''}"></td><td><input class="rowInput" id="e_qty_${m.id}" type="number" value="${m.qty||''}"></td><td><input class="rowInput" id="e_buy_${m.id}" type="number" value="${buy}"></td><td><input class="rowInput" id="e_sell_${m.id}" type="number" value="${sell}"></td><td>auto</td>${showProfit?'<td>auto</td>':''}<td><button class="saveBtn" onclick="saveEdit('${m.id}','material')">Save</button> <button class="cancelBtn" onclick="cancelEdit()">Cancel</button></td></tr>`; } return `<tr><td>${m.date||''}</td><td>${m.item||''}</td><td>${m.qty||''}</td><td>£${getBuy(m).toFixed(2)}</td><td>£${getSell(m).toFixed(2)}</td><td>£${m.total||0}</td>${showProfit?`<td>£${m.profit||0}</td>`:''}<td><button class="editBtn" onclick="editItem('${m.id}','material')">Edit</button> <button class="delBtn" onclick="delItem('${m.id}',null,${full1.indexOf(m)},'material')">Delete</button></td></tr>`; }).join('');
+let el2=document.getElementById('mattList'); if(el2) el2.innerHTML=paginate(full2,'matt').map((m,idx)=>{ if(editingId===m.id){ let oldPrice=m.qty?(m.total/m.qty):0; return `<tr class="editingRow"><td><input class="rowInput" id="e_date_${m.id}" type="date" value="${m.date||''}"></td><td><input class="rowInput" id="e_type_${m.id}" value="${m.mattressType||''}"></td><td><input class="rowInput" id="e_qty_${m.id}" type="number" value="${m.qty||''}"></td><td><input class="rowInput" id="e_price_${m.id}" type="number" value="${oldPrice}"></td><td><input class="rowInput" id="e_cust_${m.id}" value="${m.customer||''}"></td><td><input class="rowInput" id="e_brand_${m.id}" value="${m.brand||''}"></td><td><button class="saveBtn" onclick="saveEdit('${m.id}','mattress')">Save</button> <button class="cancelBtn" onclick="cancelEdit()">Cancel</button></td></tr>`; } return `<tr><td>${m.date||''}</td><td>${m.mattressType||''}</td><td>${m.qty||''}</td><td>£${m.total||0}</td><td>${m.customer||''}</td><td>${m.brand||''}</td><td><button class="editBtn" onclick="editItem('${m.id}','mattress')">Edit</button> <button class="delBtn" onclick="delItem('${m.id}',null,${full2.indexOf(m)},'mattress')">Delete</button></td></tr>`; }).join('');
+let el3=document.getElementById('workList'); if(el3) el3.innerHTML=paginate(full3,'work').map((m,idx)=>{ if(editingId===m.id){ return `<tr class="editingRow"><td><input class="rowInput" id="e_date_${m.id}" type="date" value="${m.date||''}"></td><td><input class="rowInput" id="e_name_${m.id}" value="${m.name||''}"></td><td><input class="rowInput" id="e_carried_${m.id}" value="${m.carried||''}"></td><td><input class="rowInput" id="e_trips_${m.id}" type="number" value="${m.trips||''}"></td><td>auto</td><td><input class="rowInput" id="e_paid_${m.id}" type="number" value="${m.paid||''}"></td><td><button class="saveBtn" onclick="saveEdit('${m.id}','worker')">Save</button> <button class="cancelBtn" onclick="cancelEdit()">Cancel</button></td></tr>`; } return `<tr><td>${m.date||''}</td><td>${m.name||''}</td><td>${m.carried||''}</td><td>${m.trips||''}</td><td>£${m.pay||0}</td><td>£${m.paid||''}</td><td><button class="editBtn" onclick="editItem('${m.id}','worker')">Edit</button> <button class="delBtn" onclick="delItem('${m.id}',null,${full3.indexOf(m)},'worker')">Delete</button></td></tr>`; }).join('');
+let el4=document.getElementById('expList'); if(el4) el4.innerHTML=paginate(full4,'exp').map((m,idx)=>{ if(editingId===m.id){ return `<tr class="editingRow"><td><input class="rowInput" id="e_date_${m.id}" type="date" value="${m.date||''}"></td><td><input class="rowInput" id="e_item_${m.id}" value="${m.item||''}"></td><td><input class="rowInput" id="e_amt_${m.id}" type="number" value="${m.amt||''}"></td><td><button class="saveBtn" onclick="saveEdit('${m.id}','expense')">Save</button> <button class="cancelBtn" onclick="cancelEdit()">Cancel</button></td></tr>`; } return `<tr><td>${m.date||''}</td><td>${m.item||''}</td><td>£${m.amt||0}</td><td><button class="editBtn" onclick="editItem('${m.id}','expense')">Edit</button> <button class="delBtn" onclick="delItem('${m.id}',null,${full4.indexOf(m)},'expense')">Delete</button></td></tr>`; }).join('');
+renderPagination('mat', full1.length); renderPagination('matt', full2.length); renderPagination('work', full3.length); renderPagination('exp', full4.length);
+}
+function upd(){ let sm=mats.reduce((a,b)=>a+(b.total||0),0), smm=matts.reduce((a,b)=>a+(b.total||0),0), sw=works.reduce((a,b)=>a+(b.pay||0),0), se=exps.reduce((a,b)=>a+(b.amt||0),0); let matProfit=mats.reduce((a,b)=>a+(b.profit||0),0); let e1=document.getElementById('tMat'); if(e1) e1.innerText='£'+sm; let e2=document.getElementById('tMatt'); if(e2) e2.innerText='£'+smm; let e3=document.getElementById('tWork'); if(e3) e3.innerText='£'+sw; let e4=document.getElementById('tProfit'); if(e4) e4.innerText='£'+(matProfit+smm-sw-se); }
+window.delItem = async (id, customId, rowIndex, typeHint)=>{ let arr=null; let label="this row"; if(customId && customItems[customId]){ arr=customItems[customId]; } else if(typeHint==="mattress") arr=matts; else if(typeHint==="worker") arr=works; else if(typeHint==="expense") arr=exps; else arr=mats; let idx = (typeof rowIndex==="number" && arr[rowIndex]) ? rowIndex : arr.findIndex(m=>m.id===id); if(idx===-1){ alert("Row not found, please refresh."); return; } let found=arr[idx]; label = found.item || found.mattressType || found.name || "this row"; if(!confirm("Move ONLY this ONE row to Trash?\n\n"+label+" (Row "+(idx+1)+")\n\nYou can RESTORE it later from Trash. Other rows will NOT be moved.")) return; try{ let sameIdCount = arr.filter(m=>m.id===id).length; await moveToTrash(found); if(sameIdCount<=1){ await deleteDoc(doc(db,"items",id)); } arr.splice(idx,1); renderAll(); renderAllCustom(); upd(); updActiveDashboard(); alert("Moved 1 row to Trash. 🗑️\n"+arr.length+" rows left. Click Trash (top) to restore."); }catch(e){ alert(e.message); } };
+window.editItem = (id, type, customId)=>{ editingId=id; renderAll(); renderAllCustom(); setTimeout(()=>{ let el=document.getElementById('e_date_'+id); if(el) el.focus(); },100); };
+window.cancelEdit = ()=>{ editingId=null; renderAll(); renderAllCustom(); };
+window.saveEdit = async (id, type, customId)=>{ try{ let updates={}; let item=null; if(type==="material"){ item=mats.find(m=>m.id===id); let date=document.getElementById('e_date_'+id).value; let itemName=document.getElementById('e_item_'+id).value.trim(); let qty=Number(document.getElementById('e_qty_'+id).value); let buy=Number(document.getElementById('e_buy_'+id).value); let sell=Number(document.getElementById('e_sell_'+id).value); if(!itemName||!qty||!buy||!sell){ alert("All fields required and >0"); return; } updates={date, item:itemName, qty, buyPrice:buy, total:qty*sell, profit:qty*(sell-buy)}; } else if(type==="mattress"){ item=matts.find(m=>m.id===id); let date=document.getElementById('e_date_'+id).value; let mType=document.getElementById('e_type_'+id).value.trim(); let qty=Number(document.getElementById('e_qty_'+id).value); let price=Number(document.getElementById('e_price_'+id).value); let cust=document.getElementById('e_cust_'+id).value; let brand=document.getElementById('e_brand_'+id).value; if(!mType||!qty||!price){ alert("Type, Qty, Price required"); return; } updates={date, mattressType:mType, qty, total:qty*price, customer:cust, brand}; } else if(type==="worker"){ item=works.find(m=>m.id===id); let date=document.getElementById('e_date_'+id).value; let name=document.getElementById('e_name_'+id).value.trim(); let carried=document.getElementById('e_carried_'+id).value.trim(); let trips=Number(document.getElementById('e_trips_'+id).value); let paid=document.getElementById('e_paid_'+id).value; if(!name||!carried||!trips){ alert("Name, Carried, Trips required"); return; } updates={date, name, carried, trips, pay:trips*5, paid}; } else if(type==="custom"){ let list=customItems[customId]||[]; item=list.find(m=>m.id===id); let tab=tabs.find(t=>t.id===customId); let labels=getLabelsForTab(tab||{type:'custom'}); let keys=Object.keys(labels); updates={}; keys.forEach(k=>{ let el=document.getElementById(`e_${k}_${id}`); if(!el) return; let ft=getFieldType(tab?tab.type:'custom', k); if(ft==='date') updates[k]=el.value; else if(ft==='number') updates[k]=el.value?Number(el.value):0; else updates[k]=el.value.trim(); }); let firstTextKey = keys.find(k=> getFieldType(tab?tab.type:'custom', k)==='text'); if(firstTextKey && !updates[firstTextKey]){ alert("Please fill: "+labels[firstTextKey]); return; } } else { item=exps.find(m=>m.id===id); let date=document.getElementById('e_date_'+id).value; let itemName=document.getElementById('e_item_'+id).value.trim(); let amt=Number(document.getElementById('e_amt_'+id).value); if(!itemName||!amt){ alert("Item and Amount required"); return; } updates={date, item:itemName, amt}; } await updateDoc(doc(db,"items",id), updates); if(item) Object.assign(item, updates); editingId=null; renderAll(); renderAllCustom(); upd(); updActiveDashboard(); alert("Saved!"); }catch(e){ alert(e.message); } };
+window.addMat = async ()=>{ let btn=document.getElementById('addMatBtn'); if(btn) btn.disabled=true; try{ let date=document.getElementById('mDate').value; let item=document.getElementById('mItem').value.trim(); let q=document.getElementById('mQty').value; let b=document.getElementById('mBuy').value; let s=document.getElementById('mSell').value; if(!requireFields([{id:'mItem', label:'Item', value:item},{id:'mQty', label:'Qty', value:q},{id:'mBuy', label:'Buy Price', value:b},{id:'mSell', label:'Sell Price', value:s}])) return; if(!requirePositive([{label:'Qty', value:q},{label:'Buy Price', value:b},{label:'Sell Price', value:s}])) return; let qty=Number(q), buy=Number(b), sell=Number(s); let obj={type:"material", companyId, date:date||new Date().toISOString().slice(0,10), item, qty, buyPrice:buy, total:qty*sell, profit:qty*(sell-buy), addedBy:currentUser.uid, createdAt:new Date()}; let r=await addDoc(collection(db,"items"), obj); let saved={...obj, id:r.id}; mats.push(saved); renderAll(); upd(); updActiveDashboard(); document.getElementById('mItem').value=''; document.getElementById('mQty').value=''; document.getElementById('mBuy').value=''; document.getElementById('mSell').value=''; } finally { setTimeout(()=>{ if(btn) btn.disabled=false; }, 800); } };
+window.addMatt = async ()=>{ let type=document.getElementById('mmType').value.trim(); let q=document.getElementById('mmQty').value; let p=document.getElementById('mmPrice').value; if(!requireFields([{id:'mmType', label:'Mattress Type', value:type},{id:'mmQty', label:'Qty', value:q},{id:'mmPrice', label:'Price', value:p}])) return; let qty=Number(q), price=Number(p); let obj={type:"mattress", companyId, date:document.getElementById('mmDate').value||new Date().toISOString().slice(0,10), mattressType:type, qty, total:qty*price, customer:document.getElementById('mmCust').value, brand:document.getElementById('mmBrand').value, addedBy:currentUser.uid, createdAt:new Date()}; let r=await addDoc(collection(db,"items"), obj); let saved={...obj, id:r.id}; matts.push(saved); renderAll(); upd(); updActiveDashboard(); };
+window.addWork = async ()=>{ let name=document.getElementById('wName').value.trim(); let what=document.getElementById('wWhat').value.trim(); let tr=document.getElementById('wTrips').value; if(!requireFields([{id:'wName', label:'Name', value:name},{id:'wWhat', label:'Carried', value:what},{id:'wTrips', label:'Trips', value:tr}])) return; let trips=Number(tr); let perTrip=Number(document.getElementById('wPay').value)||5; let pay=trips*perTrip; let obj={type:"worker", companyId, date:document.getElementById('wDate').value||new Date().toISOString().slice(0,10), name, carried:what, trips, pay, paid:document.getElementById('wPaid').value, addedBy:currentUser.uid, createdAt:new Date()}; let r=await addDoc(collection(db,"items"), obj); let saved={...obj, id:r.id}; works.push(saved); renderAll(); upd(); updActiveDashboard(); };
+window.addExp = async ()=>{ let item=document.getElementById('eItem').value.trim(); let a=document.getElementById('eAmt').value; if(!requireFields([{id:'eItem', label:'Item', value:item},{id:'eAmt', label:'Amount', value:a}])) return; let obj={type:"expense", companyId, date:document.getElementById('eDate').value||new Date().toISOString().slice(0,10), item, amt:Number(a), addedBy:currentUser.uid, createdAt:new Date()}; let r=await addDoc(collection(db,"items"), obj); let saved={...obj, id:r.id}; exps.push(saved); renderAll(); upd(); updActiveDashboard(); };
+renderTabs(); applyProfitUI(); updActiveDashboard();
+</script>
+</body>
+</html>
